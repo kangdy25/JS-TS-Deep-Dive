@@ -1,3 +1,2 @@
-"use strict";
-const str = "Hello World";
-console.log(str);
+import PaintBoard from "./Singleton.js";
+console.log(PaintBoard.getInstance() === PaintBoard.getInstance());

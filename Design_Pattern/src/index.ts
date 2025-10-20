@@ -1,2 +1,3 @@
-const str: string = "Hello World";
-console.log(str);
+import PaintBoard from "./Singleton.js";
+
+console.log(PaintBoard.getInstance() === PaintBoard.getInstance());
