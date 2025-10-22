@@ -1,3 +1,9 @@
 import PaintBoard from "./Singleton.js";
+import paintboardFactory from "./SimpleFactory.js";
 
-console.log(PaintBoard.getInstance() === PaintBoard.getInstance());
+function main() {
+    paintboardFactory("ie");
+    paintboardFactory("chrome");
+}
+
+main();
