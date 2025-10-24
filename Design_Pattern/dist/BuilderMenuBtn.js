@@ -1,41 +1,26 @@
-import { PaintBoardMenu } from "./AbstractFactoryMenu.js";
-
-abstract class PaintBoardMenuElementBuilder {
-    btn!: PaintBoardMenuInput;
-    constructor() {}
-
+class PaintBoardMenuElementBuilder {
+    btn;
+    constructor() { }
     build() {
         return this.btn;
     }
 }
-
-export abstract class PaintBoardMenuElement {
-    protected menu: PaintBoardMenu;
-    protected name: string;
-
-    protected constructor(menu: PaintBoardMenu, name: string) {
+export class PaintBoardMenuElement {
+    menu;
+    name;
+    constructor(menu, name) {
         this.menu = menu;
         this.name = name;
     }
-
-    abstract draw(): void;
 }
-
 export class PaintBoardMenuInput extends PaintBoardMenuElement {
-    private onChange?: () => void;
-    private value?: string | number;
-
-    private constructor(
-        menu: PaintBoardMenu,
-        name: string,
-        onChange?: () => void,
-        value?: string | number
-    ) {
+    onChange;
+    value;
+    constructor(menu, name, onChange, value) {
         super(menu, name);
         this.onChange = onChange;
         this.value = value;
     }
-
     draw() {
         const btn = document.createElement("input");
         btn.type = "color";
@@ -45,39 +30,30 @@ export class PaintBoardMenuInput extends PaintBoardMenuElement {
         }
         this.menu.dom.append(btn);
     }
-
     static Builder = class PaintBoardMenuInputBuilder extends PaintBoardMenuElementBuilder {
-        override btn: PaintBoardMenuInput;
-        constructor(menu: PaintBoardMenu, name: string) {
+        btn;
+        constructor(menu, name) {
             super();
             this.btn = new PaintBoardMenuInput(menu, name);
         }
-        setOnChange(onChange: () => void) {
+        setOnChange(onChange) {
             this.btn.onChange = onChange;
             return this;
         }
-        setValue(value: string | number) {
+        setValue(value) {
             this.btn.value = value;
             return this;
         }
     };
 }
-
 export class PaintBoardMenuBtn extends PaintBoardMenuElement {
-    private onClick?: () => void;
-    private active?: boolean;
-
-    private constructor(
-        menu: PaintBoardMenu,
-        name: string,
-        onClick?: () => void,
-        active?: boolean
-    ) {
+    onClick;
+    active;
+    constructor(menu, name, onClick, active) {
         super(menu, name);
         this.onClick = onClick;
         this.active = active;
     }
-
     draw() {
         const btn = document.createElement("button");
         btn.textContent = this.name;
@@ -86,18 +62,17 @@ export class PaintBoardMenuBtn extends PaintBoardMenuElement {
         }
         this.menu.dom.append(btn);
     }
-
     static Builder = class PaintBoardMenuBtnBuilder extends PaintBoardMenuElementBuilder {
-        override btn: PaintBoardMenuBtn;
-        constructor(menu: PaintBoardMenu, name: string) {
+        btn;
+        constructor(menu, name) {
             super();
             this.btn = new PaintBoardMenuBtn(menu, name);
         }
-        setOnClick(onClick: () => void) {
+        setOnClick(onClick) {
             this.btn.onClick = onClick;
             return this;
         }
-        setActive(active: boolean) {
+        setActive(active) {
             this.btn.active = active;
             return this;
         }

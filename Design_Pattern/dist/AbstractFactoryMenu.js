@@ -1,54 +1,29 @@
 import { PaintBoardMenuBtn, PaintBoardMenuInput } from "./BuilderMenuBtn.js";
-import PaintBoard from "./PaintBoard_with_Browser/PaintBoardBase.js";
-import ChromePaintBoard from "./PaintBoard_with_Browser/ChromePaintBoard.js";
-import IEPaintBoard from "./PaintBoard_with_Browser/IEPaintBoard.js";
-
-export abstract class PaintBoardMenu {
-    paintboard: PaintBoard;
-    dom: HTMLElement;
-    protected constructor(paintboard: PaintBoard, dom: HTMLElement) {
+export class PaintBoardMenu {
+    paintboard;
+    dom;
+    constructor(paintboard, dom) {
         this.paintboard = paintboard;
         this.dom = dom;
     }
-
-    abstract initialize(types: BtnType[]): void;
-    static getInstance(paintboard: PaintBoard, dom: HTMLElement) {}
+    static getInstance(paintboard, dom) { }
 }
-
 export class IEPaintBoardMenu extends PaintBoardMenu {
-    private static instance: IEPaintBoardMenu;
-    override initialize(types: BtnType[]): void {}
-
-    static override getInstance(
-        paintboard: IEPaintBoard,
-        dom: HTMLElement
-    ): IEPaintBoardMenu {
+    static instance;
+    initialize(types) { }
+    static getInstance(paintboard, dom) {
         if (!this.instance) {
             this.instance = new IEPaintBoardMenu(paintboard, dom);
         }
         return this.instance;
     }
 }
-
-type BtnType =
-    | "back"
-    | "forward"
-    | "color"
-    | "pipette"
-    | "pen"
-    | "circle"
-    | "rectangle"
-    | "eraser"
-    | "save";
-
 export class ChromePaintBoardMenu extends PaintBoardMenu {
-    private static instance: ChromePaintBoardMenu;
-
-    override initialize(types: BtnType[]): void {
+    static instance;
+    initialize(types) {
         types.forEach(this.drawButtonByType.bind(this));
     }
-
-    drawButtonByType(type: BtnType) {
+    drawButtonByType(type) {
         switch (type) {
             case "back": {
                 const btn = new PaintBoardMenuBtn.Builder(this, "뒤로").build();
@@ -56,34 +31,22 @@ export class ChromePaintBoardMenu extends PaintBoardMenu {
                 return btn;
             }
             case "forward": {
-                const btn = new PaintBoardMenuBtn.Builder(
-                    this,
-                    "앞으로"
-                ).build();
+                const btn = new PaintBoardMenuBtn.Builder(this, "앞으로").build();
                 btn.draw();
                 return btn;
             }
             case "color": {
-                const btn = new PaintBoardMenuInput.Builder(
-                    this,
-                    "컬러"
-                ).build();
+                const btn = new PaintBoardMenuInput.Builder(this, "컬러").build();
                 btn.draw();
                 return btn;
             }
             case "pipette": {
-                const btn = new PaintBoardMenuBtn.Builder(
-                    this,
-                    "스포이드"
-                ).build();
+                const btn = new PaintBoardMenuBtn.Builder(this, "스포이드").build();
                 btn.draw();
                 return btn;
             }
             case "eraser": {
-                const btn = new PaintBoardMenuBtn.Builder(
-                    this,
-                    "지우개"
-                ).build();
+                const btn = new PaintBoardMenuBtn.Builder(this, "지우개").build();
                 btn.draw();
                 return btn;
             }
@@ -98,10 +61,7 @@ export class ChromePaintBoardMenu extends PaintBoardMenu {
                 return btn;
             }
             case "rectangle": {
-                const btn = new PaintBoardMenuBtn.Builder(
-                    this,
-                    "사각형"
-                ).build();
+                const btn = new PaintBoardMenuBtn.Builder(this, "사각형").build();
                 btn.draw();
                 return btn;
             }
@@ -114,11 +74,7 @@ export class ChromePaintBoardMenu extends PaintBoardMenu {
                 throw new Error(`알 수 없는 타입 ${type}`);
         }
     }
-
-    static override getInstance(
-        paintboard: ChromePaintBoard,
-        dom: HTMLElement
-    ): ChromePaintBoardMenu {
+    static getInstance(paintboard, dom) {
         if (!this.instance) {
             this.instance = new ChromePaintBoardMenu(paintboard, dom);
         }

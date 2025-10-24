@@ -1,5 +1,5 @@
-import ChromePaintBoard from "./PaintBoard_with_Browser/ChromePaintBoard";
-import IEPaintBoard from "./PaintBoard_with_Browser/IEPaintBoard";
+import ChromePaintBoard from "./PaintBoard_with_Browser/ChromePaintBoard.js";
+import IEPaintBoard from "./PaintBoard_with_Browser/IEPaintBoard.js";
 
 // -------------------------------------------------
 //   Simple Factory Pattern (간단한 팩토리)

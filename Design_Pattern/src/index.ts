@@ -1,4 +1,7 @@
-import { ChromePaintBoardFactory, IEPaintBoardFactory } from "./FactoryMethod";
+import {
+    ChromePaintBoardFactory,
+    IEPaintBoardFactory,
+} from "./FactoryMethod.js";
 
 // ----------------------------------------------------
 //  클라이언트 코드 (Client)
@@ -7,16 +10,28 @@ import { ChromePaintBoardFactory, IEPaintBoardFactory } from "./FactoryMethod";
 //    팩토리를 통해 생성해서 동일한 방식으로 사용 가능하다.
 
 function main() {
-  const paintboard = ChromePaintBoardFactory.createPaintBoard();
-  const paintboardMenu =
-    ChromePaintBoardFactory.createPaintBoardMenu(paintboard);
-  const paintboardHistory =
-    ChromePaintBoardFactory.createPaintBoardHistory(paintboard);
+    const paintboard = ChromePaintBoardFactory.createPaintBoard();
+    const paintboardMenu = ChromePaintBoardFactory.createPaintBoardMenu(
+        paintboard,
+        document.querySelector("#menu")!
+    );
+    const paintboardHistory =
+        ChromePaintBoardFactory.createPaintBoardHistory(paintboard);
 
-  // 공통 인터페이스를 통해 동일한 방식으로 동작
-  paintboard.initialize();
-  paintboardMenu.initialize();
-  paintboardHistory.initialize();
+    // 공통 인터페이스를 통해 동일한 방식으로 동작
+    paintboard.initialize();
+    paintboardMenu.initialize([
+        "back",
+        "forward",
+        "color",
+        "pipette",
+        "pen",
+        "circle",
+        "rectangle",
+        "eraser",
+        "save",
+    ]);
+    paintboardHistory.initialize();
 }
 
 main();
