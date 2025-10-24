@@ -10,7 +10,7 @@ import ChromePaintBoard from "./PaintBoard_with_Browser/ChromePaintBoard.js";
 import IEPaintBoard from "./PaintBoard_with_Browser/IEPaintBoard.js";
 
 // ----------------------------------------------------
-//  추상 팩토리 (Abstract Creator)
+//   Abstract Creator (추상 팩토리)
 // ----------------------------------------------------
 // => 객체 생성 방식을 정의하는 상위 클래스 (인터페이스 역할)
 //    하위 클래스가 어떤 PaintBoard를 생성할지 결정한다.
@@ -29,7 +29,7 @@ export abstract class AbstractPaintBoardFactory {
 }
 
 // ----------------------------------------------------
-//  구체 팩토리 (Concrete Creators)
+//  Concrete Creators (구체 팩토리)
 // ----------------------------------------------------
 // => 실제로 어떤 PaintBoard를 생성할지를 하위 클래스에서 결정한다.
 
