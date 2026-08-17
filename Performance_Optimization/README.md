@@ -2,7 +2,7 @@
 
 현대 웹 애플리케이션에서 **성능(Performance)**은 사용자 경험(UX)과 비즈니스 성공을 결정짓는 핵심 요소입니다. 느린 로딩 속도와 끊기는 화면 전환은 사용자 이탈률을 높이고 검색 엔진 최적화(SEO) 점수를 저하시킵니다.
 
-본 가이드는 본 프로젝트(`learning_project`)의 프론트엔드 성능 최적화 교과과정(Module 1 ~ Module 6)을 바탕으로 제작되었습니다. 각 챕터는 브라우저가 화면을 렌더링하는 기본 원리부터 분석 도구 활용, 에셋 캐싱, 비동기 로딩, GPU 하드웨어 가속, 그리고 Vue.js 프레임워크 수준의 튜닝 기법까지의 실무 지식과 구체적인 코드 예시들을 상세하게 정리하여 제공합니다.
+본 가이드는 본 프로젝트(`learning_project`)의 프론트엔드 성능 최적화 교과과정(Module 1 ~ Module 9)을 바탕으로 제작되었습니다. 각 챕터는 브라우저가 화면을 렌더링하는 기본 원리부터 분석 도구 활용, 에셋 캐싱, 비동기 로딩, GPU 하드웨어 가속, Vue.js 프레임워크 수준의 튜닝, 그리고 실제 사용자 경험을 기준으로 성능을 진단하는 **Web Vitals**까지의 실무 지식과 구체적인 코드 예시들을 상세하게 정리하여 제공합니다.
 
 ---
 
@@ -25,3 +25,12 @@
 
 ### 📌 [Chapter 6: Vue.js & 상태 관리 최적화 (Vue Reactivity & Cache)](./chapter-6-framework-tuning.md)
 * Vue 3 반응형 프록시의 깊은 관찰(Deep Observation) 오버헤드를 우회하기 위한 **shallowRef 및 shallowReactive** 활용 코드를 대조 분석합니다. 또한 Pinia/Computed의 **캐싱 구조** 원리를 이해하고, 게터에 인자를 전달할 때 발생하는 캐시 소실 현상을 극복하기 위한 **Map 매핑 구조** 개선 대안을 살펴봅니다.
+
+### 📌 [Chapter 7: Web Vitals와 웹 성능 측정 전략 (Lab & Field Data)](./chapter-7-web-vitals-measurement.md)
+* **Web Vitals와 Core Web Vitals**의 역할 및 SEO와의 관계를 이해하고, Lighthouse 기반의 Lab Data와 CrUX/RUM 기반의 Field Data를 구분하여 실제 사용자 경험을 측정하는 분석 Workflow를 학습합니다.
+
+### 📌 [Chapter 8: Core Web Vitals 심화 분석 (LCP, INP & CLS)](./chapter-8-core-web-vitals.md)
+* 로딩 체감 속도를 결정하는 **LCP**, 사용자 조작 반응성을 측정하는 **INP**, 화면 안정성을 나타내는 **CLS**의 브라우저 측정 원리와 병목 원인, 그리고 서버·이미지·메인 스레드·레이아웃 관점의 개선 전략을 다룹니다.
+
+### 📌 [Chapter 9: Vue/Nuxt Web Vitals 최적화 실전 (SSR, Hydration & Rendering)](./chapter-9-vue-nuxt-web-vitals.md)
+* Vue 3 반응형 렌더링과 Nuxt의 SSR/SSG/Hydration 구조가 **LCP, INP, CLS**에 미치는 영향을 추적하고, 이미지·비동기 컴포넌트·이벤트 핸들러·동적 콘텐츠를 실제 코드로 개선하는 방법을 학습합니다.
