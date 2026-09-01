@@ -1,4 +1,5 @@
 import socket
+import ssl
 
 class URL:
     def __init__(self, url):
@@ -12,14 +13,30 @@ class URL:
         self.host, url = url.split("/", 1)
         self.path = "/" + url
 
+        # http와 https의 포트 분기
+        if self.scheme == "http":
+            self.port = 80
+        elif self.scheme == "https":
+            self.port = 443
+
     def request(self):
         s = socket.socket(
             family=socket.AF_INET, # 다른 컴퓨터를 찾는 주소 패밀리
             type=socket.SOCK_STREAM, # 임의의 양의 데이터를 전송하는 소켓의 타입
             proto=socket.IPPROTO_TCP # 두 컴퓨터가 연결을 설정하는 단계를 설정하는 프로토콜
         )
-        # 80번 포트에 연결
-        s.connect((self.host, 80))
+        # http, https 각각에 맞는 포트에 연결
+        s.connect((self.host, self.port))
+
+        # ssl 라이브러리를 활용하여 소켓을 감싸줌
+        if self.scheme == "https":
+            ctx = ssl.create_default_context()
+            s = ctx.wrap_socket(s, server_hostname=self.host)
+
+        # 호스트 이름 뒤 콜론을 붙여 URL에 지정하는 사용자 지정 포트에 대한 지원 추가
+        if ":" in self.host:
+            self.host, port = self.host.split(":", 1)
+            self.port = int(port)
 
         # format 메서드를 통해 path와 host 바인딩
         request = "GET {} HTTP/1.0\r\n".format(self.path)
