@@ -4,7 +4,7 @@ class URL:
     def __init__(self, url):
         # ://을 기준으로 scheme과 url을 분할하기
         self.scheme, url = url.split("://", 1)
-        assert self.scheme == "http"
+        assert self.scheme in ["http", "https"]
 
         if "/" not in url:
             url = url + "/"
@@ -25,7 +25,7 @@ class URL:
         request = "GET {} HTTP/1.0\r\n".format(self.path)
         request += "Host: {}\r\n".format(self.host)
         request += "\r\n" # 두 번의 줄바꿈을 통해 서버에 요청 전송
-        s.send(request.encode("utf9")) # encode()는 텍스트를 바이트로 변환함
+        s.send(request.encode("utf8")) # encode()는 텍스트를 바이트로 변환함
 
         # 바이트가 포함된 파일 형식의 객체를 반환하며 루프를 감추는 헬퍼 함수 makefile 사용
         response = s.makefile("r", encoding="utf8", newline="\r\n")
@@ -48,3 +48,25 @@ class URL:
 
         # 수신된 최종 문자열 반환
         return body
+
+# 태그 제거 후, 텍스트만 화면에 출력
+def show(body):
+    in_tag = False
+    for c in body:
+        if c == "<":
+            in_tag = True
+        elif c == ">":
+            in_tag = False
+        elif not in_tag:
+            print(c, end="")
+
+# 전체 브라우저 동작 흐름을 묶어서 실행하는 진입점
+def load(url):
+    body = url.request()
+    show(body)
+
+# 커맨드 라인에서 이 스크립트를 실행했을 때만 실행됨
+if __name__ == "__main__":
+    import sys
+    load(URL(sys.argv[1]))
+
