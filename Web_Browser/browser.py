@@ -1,5 +1,8 @@
 import socket
 import ssl
+import tkinter
+
+WIDTH, HEIGHT = 800, 600
 
 class URL:
     def __init__(self, url):
@@ -77,13 +80,27 @@ def show(body):
         elif not in_tag:
             print(c, end="")
 
-# 전체 브라우저 동작 흐름을 묶어서 실행하는 진입점
-def load(url):
-    body = url.request()
-    show(body)
+
+
+
+class Browser:
+    def __init__(self):
+        self.window = tkinter.Tk()
+        self.canvas = tkinter.Canvas(self.window, width=WIDTH, height=HEIGHT)
+        self.canvas.pack()
+
+    # 전체 브라우저 동작 흐름을 묶어서 실행하는 진입점
+    def load(self, url):
+        body = url.request()
+        show(body)
+        self.canvas.create_rectangle(10, 20, 400, 300)
+        self.canvas.create_oval(100, 100, 150, 150)
+        self.canvas.create_text(200, 150, text="Hello World")
+
 
 # 커맨드 라인에서 이 스크립트를 실행했을 때만 실행됨
 if __name__ == "__main__":
     import sys
-    load(URL(sys.argv[1]))
+    Browser().load(URL(sys.argv[1]))
+    tkinter.mainloop()
 
