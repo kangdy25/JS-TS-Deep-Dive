@@ -2,7 +2,12 @@ import socket
 import ssl
 import tkinter
 
+# 화면 기본 해상도 설정
 WIDTH, HEIGHT = 800, 600
+# 문자 하나당 차지할 가로 간격(HSTEP)과 세로 줄 간격(VSTEP)
+HSTEP, VSTEP = 13, 18
+# 스크롤 이동 시 한 번에 이동할 픽셀 단위
+SCROLL_STEP = 100
 
 class URL:
     def __init__(self, url):
@@ -70,32 +75,63 @@ class URL:
         return body
 
 # 태그 제거 후, 텍스트만 화면에 출력
-def show(body):
+def lex(body):
+    text = ""
     in_tag = False
     for c in body:
         if c == "<":
-            in_tag = True
+            in_tag = True # 태그 시작 지점
         elif c == ">":
-            in_tag = False
+            in_tag = False # 태그 끝 지점
         elif not in_tag:
-            print(c, end="")
+            text += c # 태그 밖의 실제 텍스트 문자만 누적
+    return text
 
+# 텍스트의 각 문자가 배치될 절대 좌표를 계산하여 디스플레이 리스트 생성하기
+def layout(text):
+    display_list = []
+    cursor_x, cursor_y = HSTEP, VSTEP
+    for c in text:
+        display_list.append((cursor_x, cursor_y, c))
+        cursor_x += HSTEP # 다음 문자가 그려질 x 위치 이동
 
-
+        # 캔버스 오른쪽 경계에 도달하면 다음 줄로 줄바꿈(Word wrap 기초)
+        if cursor_x >= WIDTH - HSTEP:
+            cursor_y += VSTEP # y 위치를 한 줄 아래로 내림
+            cursor_x = HSTEP # x 위치를 줄의 맨 처음으로 리셋
+    return display_list
 
 class Browser:
     def __init__(self):
+        # GUI 윈도우 생성 및 캔버스 위젯 배치
         self.window = tkinter.Tk()
         self.canvas = tkinter.Canvas(self.window, width=WIDTH, height=HEIGHT)
         self.canvas.pack()
+        self.scroll = 0
+        # 아래쪽 방향키를 눌렀을 때 스크롤 다운 함수 호출 바인딩
+        self.window.bind("<Down>", self.scrolldown)
 
     # 전체 브라우저 동작 흐름을 묶어서 실행하는 진입점
     def load(self, url):
         body = url.request()
-        show(body)
-        self.canvas.create_rectangle(10, 20, 400, 300)
-        self.canvas.create_oval(100, 100, 150, 150)
-        self.canvas.create_text(200, 150, text="Hello World")
+        text = lex(body)
+        self.display_list = layout(text)
+        self.draw()
+
+    # 디스플레이 리스트를 순회하며 캔버스에 그리기(페인팅 단계)
+    def draw(self):
+        self.canvas.delete("all")
+        for x, y, c in self.display_list:
+            # 화면(뷰포트) 밖으로 벗어난 문자는 건너뛰기
+            if y > self.scroll + HEIGHT: continue
+            if y + VSTEP < self.scroll: continue
+            # 절대 y 좌표에서 스크롤 오프셋을 뺀 상대 위치에 문자 그리기
+            self.canvas.create_text(x, y - self.scroll, text=c)
+
+    # 아래 방향키 입력 이벤트 핸들러
+    def scrolldown(self, e):
+        self.scroll += SCROLL_STEP
+        self.draw()
 
 
 # 커맨드 라인에서 이 스크립트를 실행했을 때만 실행됨
