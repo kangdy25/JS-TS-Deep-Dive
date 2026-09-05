@@ -1,6 +1,7 @@
 import socket
 import ssl
 import tkinter
+import tkinter.font
 
 # 화면 기본 해상도 설정
 WIDTH, HEIGHT = 800, 600
@@ -89,15 +90,17 @@ def lex(body):
 
 # 텍스트의 각 문자가 배치될 절대 좌표를 계산하여 디스플레이 리스트 생성하기
 def layout(text):
+    font = tkinter.font.Font()
     display_list = []
     cursor_x, cursor_y = HSTEP, VSTEP
-    for c in text:
-        display_list.append((cursor_x, cursor_y, c))
-        cursor_x += HSTEP # 다음 문자가 그려질 x 위치 이동
-
+    for word in text.split(): # 텍스트를 한 번에 한 단어 단위로 배치
+        w = font.measure(word) # 단어의 너비 측정
+        display_list.append((cursor_x, cursor_y, word))
+        cursor_x += w + font.measure(" ") # 단어 사이에 공백을 둠
+        
         # 캔버스 오른쪽 경계에 도달하면 다음 줄로 줄바꿈(Word wrap 기초)
-        if cursor_x >= WIDTH - HSTEP:
-            cursor_y += VSTEP # y 위치를 한 줄 아래로 내림
+        if cursor_x + w > WIDTH - HSTEP:
+            cursor_y += font.metrics("linespace") * 1.25 # 가독성을 위하여 1.25를 곱함
             cursor_x = HSTEP # x 위치를 줄의 맨 처음으로 리셋
     return display_list
 
@@ -126,7 +129,7 @@ class Browser:
             if y > self.scroll + HEIGHT: continue
             if y + VSTEP < self.scroll: continue
             # 절대 y 좌표에서 스크롤 오프셋을 뺀 상대 위치에 문자 그리기
-            self.canvas.create_text(x, y - self.scroll, text=c)
+            self.canvas.create_text(x, y - self.scroll, text=c, anchor='nw')
 
     # 아래 방향키 입력 이벤트 핸들러
     def scrolldown(self, e):
